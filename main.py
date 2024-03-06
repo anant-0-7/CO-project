@@ -19,3 +19,8 @@ s_type = {"sw": ["0100011", "010"]}
 b_type = {"beq": "000", "bne": "001", "blt": "100", "bge":"101", "bltu": "110", "bgeu": "111"}
 #opcode for all is 110001
 
+u_type = {"lui":"0110111", "auipc":"0010111"}
+#No funct3 required
+
+j_type = {"jal": "1101111"}
+#no funct3
