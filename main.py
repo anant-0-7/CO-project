@@ -1,9 +1,4 @@
-#Random lines of code
 
-
-
-
-print('Hello world')
 
 r_type = {'add':"000", 'sub':"000", 'sll':"001",'slt':"010", 'sltu':"011", 'xor':"100", 'srl':"101", 'or':"110", 'and':"111"}
 #Funct7 is all zero except in sub which is 0100000
@@ -77,4 +72,4 @@ for i in read:
         continue
     print(i_list)
 f.close()
- main
+ 
