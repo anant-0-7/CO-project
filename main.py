@@ -21,6 +21,8 @@ j_type = {"jal": "1101111"}
 #no funct3
 
 
+
+
 def tows_complement(binary):
     ones_complement = ''
     for i in binary:
@@ -64,10 +66,22 @@ print(imm_to_bin(0, 10))
 f = open("text.txt","r")
 read = f.readlines()
 for i in read:
+
     words = i.split()
     i_list = []
     for word in words:
         i_list.extend(word.split(","))
+
+    if i_list[0] in r_type:
+        if i_list == "sub":
+            binary = ""
+            binary += "0100000" + r_type[i_list[0]] + "0110011"
+
+        else:
+            binary = ""
+            binary += "0100000" + r_type[i_list[0]] + "0110011"
+
+    
     if (i_list == []):
         continue
     print(i_list)
