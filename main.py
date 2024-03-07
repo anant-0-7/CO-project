@@ -1,5 +1,40 @@
 
 
+register_dict = {
+   "zero": "00000",
+   "ra": "00001",
+   "sp": "00010",
+   "gp": "00011",
+   "tp": "00100",
+   "t0": "00101",
+    "t1": "00110",
+    "t2": "00111",
+    "s0": "01000",
+    "s1": "01001",
+   "s1": "01001",
+   "a0": "01010",
+   "a1": "01011",
+   "a2": "01100",  
+   "a3": "01100",
+   "a4": "01100",
+   "a5": "01100",
+   "a6": "01100",
+   "a7": "01100",
+   "s2": "10010",  
+   "s3": "10011",
+   "s4": "10100",
+   "s5": "10101",
+   "s6": "10110",
+   "s7": "10111",
+   "s8": "11000",
+   "s9": "11001",
+   "s10": "11010",
+   "s11": "11011",
+   "t3": "11100",  
+   "t4": "11101",
+   "t5": "11110",
+   "t6": "11111",
+}
 r_type = {'add':"000", 'sub':"000", 'sll':"001",'slt':"010", 'sltu':"011", 'xor':"100", 'srl':"101", 'or':"110", 'and':"111"}
 #Funct7 is all zero except in sub which is 0100000
 #Opcode is 0110011
@@ -19,6 +54,8 @@ u_type = {"lui":"0110111", "auipc":"0010111"}
 
 j_type = {"jal": "1101111"}
 #no funct3
+
+
 
 
 def tows_complement(binary):
@@ -64,10 +101,22 @@ print(imm_to_bin(0, 10))
 f = open("text.txt","r")
 read = f.readlines()
 for i in read:
+
     words = i.split()
     i_list = []
     for word in words:
         i_list.extend(word.split(","))
+
+    if i_list[0] in r_type:
+        if i_list == "sub":
+            binary = ""
+            binary += "0100000" + register_dict[i_list[1]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[3]]+"0110011"
+
+        else:
+            binary = ""
+            binary += "0000000" + register_dict[i_list[1]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[3]]+"0110011"
+
+    
     if (i_list == []):
         continue
     print(i_list)
