@@ -24,3 +24,16 @@ u_type = {"lui":"0110111", "auipc":"0010111"}
 
 j_type = {"jal": "1101111"}
 #no funct3
+
+
+f = open("text.txt","r")
+read = f.readlines()
+for i in read:
+    words = i.split()
+    i_list = []
+    for word in words:
+        i_list.extend(word.split(","))
+    if (i_list == []):
+        continue
+    print(i_list)
+f.close()
