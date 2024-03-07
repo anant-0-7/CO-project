@@ -26,6 +26,45 @@ j_type = {"jal": "1101111"}
 #no funct3
 
 
+def tows_complement(binary):
+    ones_complement = ''
+    for i in binary:
+        if i=='1':
+            ones_complement += '0'
+        else:
+            ones_complement += '1'
+
+    result = ''
+    carry = True
+    for i in ones_complement[::-1]:
+        if i == '0' and carry:
+            result = '1' + result
+            carry = False
+        elif i == '1' and carry:
+            result = '0' + result
+        else:
+            result = i + result
+
+    return result
+
+
+def imm_to_bin(a, no_of_bits):
+    n = abs(int(a))
+    binary = ''
+    while n:
+        binary = str(n % 2) + binary
+        n //= 2
+        
+    length = no_of_bits - len(binary)
+    final = length * '0'
+    binary1 = final + binary
+
+    if int(a) < 0:
+        binary1= tows_complement(binary1)
+        
+    return binary1
+
+print(imm_to_bin(0, 10)) 
 
 f = open("text.txt","r")
 read = f.readlines()
@@ -38,3 +77,4 @@ for i in read:
         continue
     print(i_list)
 f.close()
+ main
