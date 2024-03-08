@@ -134,5 +134,6 @@ for i in read:
     if (i_list == []):
         continue
     print(i_list)
+    
 f.close()
  
