@@ -127,17 +127,17 @@ for i in read:
     #I Type
     elif i_list[0] in i_type:
         binary = imm_to_bin(int(i_list[3]),12)
-        s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
+        binary+= binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
     
     #S Type
     elif i_list[0] in s_type:
         binary=imm_to_bin(int(i_list[2],12))
-        binary=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
+        binary+=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
     
     #B Type
     elif i_list[0] in b_type:
         binary=imm_to_bin(int(i_list[3]),13)
-        binary=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
+        binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
         
     if (i_list == []):
         continue
