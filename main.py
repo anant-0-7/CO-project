@@ -137,8 +137,7 @@ for i in read:
     #B Type
     elif i_list[0] in b_type:
         binary=imm_to_bin(int(i_list[3]),13)
-        binary=binary[0]+register_dict[i_list[1]]+register_dict[i_list[2]]+b_type[i_list[0]]
-    #b type ki binary ki fomratting dekhni hai abhi 
+        binary=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
         
     if (i_list == []):
         continue
