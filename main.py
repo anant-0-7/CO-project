@@ -107,6 +107,13 @@ for i in read:
     for word in words:
         i_list.extend(word.split(","))
 
+    if '(' in i_list[-1]:
+        inst = i_list[-1].split("(")
+        i_list[2] = inst[1][0:-1]
+        i_list[3] = inst[0]
+
+    
+    #R Type instructions
     if i_list[0] in r_type:
         if i_list == "sub":
             binary = ""
@@ -116,6 +123,9 @@ for i in read:
             binary = ""
             binary += "0000000" + register_dict[i_list[1]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[3]]+"0110011"
 
+    elif i_list[0] in i_type:
+        binary = imm_to_bin(int(i_list[3]),12)
+        s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
     
     if (i_list == []):
         continue
