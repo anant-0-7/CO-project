@@ -110,7 +110,7 @@ for i in read:
     if '(' in i_list[-1]:
         inst = i_list[-1].split("(")
         i_list[2] = inst[1][0:-1]
-        i_list[3] = inst[0]
+        i_list.append(inst[0])
 
     
     #R Type instructions
