@@ -131,6 +131,10 @@ for i in read:
         binary=imm_to_bin(int(i_list[2],12))
         binary=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
     
+    elif i_list[0] in b_type:
+        binary=imm_to_bin(int(i_list[3]),13)
+        binary=binary[0]+register_dict[i_list[1]]+register_dict[i_list[2]]+b_type[i_list[0]]
+        
     if (i_list == []):
         continue
     print(i_list)
