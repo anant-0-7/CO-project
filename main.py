@@ -117,11 +117,11 @@ for i in read:
     if i_list[0] in r_type:
         if i_list == "sub":
             binary = ""
-            binary += "0100000" + register_dict[i_list[1]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[3]]+"0110011"
+            binary += "0100000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
 
         else:
             binary = ""
-            binary += "0000000" + register_dict[i_list[1]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[3]]+"0110011"
+            binary += "0000000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
 
     elif i_list[0] in i_type:
         binary = imm_to_bin(int(i_list[3]),12)
