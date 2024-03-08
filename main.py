@@ -137,3 +137,4 @@ for i in read:
     
 f.close()
  
+print(imm_to_bin(0, 10)) 
