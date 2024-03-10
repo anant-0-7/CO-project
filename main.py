@@ -53,6 +53,9 @@ u_type = {"lui":"0110111", "auipc":"0010111"}
 j_type = {"jal": "1101111"}
 #no funct3
 
+register_list=['zero','ra','sp','gp','tp','t0','t1','t2','s0','s1','a0','a1','a2','a3','a4','a5','a6','a7','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','t3','t4','t5','t6']
+
+
 def tows_complement(binary):
     ones_complement = ''
     for i in binary:
@@ -92,7 +95,7 @@ def imm_to_bin(a, no_of_bits):
     return binary1
 
 
-f = open("text.txt","r")
+f = open("demo.txt","r")
 read = f.readlines()
 binary_output=" "
 for i in read:
@@ -110,20 +113,32 @@ for i in read:
     
     #R Type instructions
     if i_list[0] in r_type:
+        
+        if((i_list[3] or i_list[2] or i_list[1])not in register_list):
+            print("ERROR: registers not defined")
+            break
+        
         if i_list == "sub":
             binary = ""
             binary += "0100000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
+            
 
         else:
             binary = ""
             binary += "0000000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
+            
 
     
     #I Type
     elif i_list[0] in i_type:
+        
         given_value=int(i_list[3])
         if(given_value<-2**11 or given_value> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
+            break
+        
+        if((i_list[2] or i_list[1])not in register_list):
+            print("ERROR: registers not defined")
             break
         
         binary = imm_to_bin(int(i_list[3]),12)
@@ -135,6 +150,11 @@ for i in read:
         if(given_value<-2**11 or given_value> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
             break
+        
+        if((i_list[3] or i_list[1])not in register_list):
+            print("ERROR: registers not defined")
+            break
+        
         binary=imm_to_bin(int(i_list[2],12))
         binary+=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
     
@@ -143,6 +163,10 @@ for i in read:
         given_value=int(i_list[3])
         if(given_value<-2**12 or given_value> 2**12-1):
             print("ERROR:the immediate value is out of bounds")
+            break
+        
+        if((i_list[2] or i_list[1])not in register_list):
+            print("ERROR: registers not defined")
             break
         
         binary=imm_to_bin(int(i_list[3]),13)
@@ -156,6 +180,10 @@ for i in read:
             print("ERROR:the immediate value is out of bounds")
             break
         
+        if(i_list[1]not in register_list):
+            print("ERROR: registers not defined")
+            break
+        
         imm=imm_to_bin(int(i_list[2]),32)
         binary+=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
         
@@ -165,8 +193,15 @@ for i in read:
         if(given_value<-2**20 or given_value> 2**20-1):
             print("ERROR:the immediate value is out of bounds")
             break
+        
+        if(i_list[1]not in register_list):
+            print("ERROR: registers not defined")
+            break
+        
         imm=imm_to_bin(int(i_list[2]),21)
         binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
+        
+    
     
         
     if (i_list == []):
