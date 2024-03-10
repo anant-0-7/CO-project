@@ -142,21 +142,18 @@ for i in read:
 
         s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
 
-    elif i_list[0] in s_type:
-        binary = imm_to_bin(int(i_list[3]),12)
-        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
-
-    
     #S Type
     elif i_list[0] in s_type:
-        given_value=int(i_list[2])
-        if(given_value<-2**11 or given_value> 2**11-1):
+        if(int(i_list[3])<-2**11 or int(i_list[3])> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
             break
 
 
+        binary = imm_to_bin(int(i_list[3]),12)
+        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
+
         binary=imm_to_bin(int(i_list[2],12))
-        binary+=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
+        s=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
     
     #B Type
     elif i_list[0] in b_type:
@@ -173,7 +170,7 @@ for i in read:
             break
         
         binary=imm_to_bin(lab,13)
-        binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
+        s=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
         
     
     #U TYPE
@@ -184,7 +181,7 @@ for i in read:
             break
         
         imm=imm_to_bin(int(i_list[2]),32)
-        binary+=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
+        s=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
         
     # J TYPE
     elif i_list[0] in j_type:
@@ -195,7 +192,7 @@ for i in read:
 
 
         imm=imm_to_bin(int(i_list[2]),21)
-        binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
+        s=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
     
     count += 1
 
