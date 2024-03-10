@@ -96,6 +96,15 @@ def imm_to_bin(a, no_of_bits):
 f = open("text.txt","r")
 read = f.readlines()
 binary_output=" "
+labels = {}
+count = 1
+for j in read:
+    if ":" in j:
+        index = j.index(":")
+        labels[j[:index]]= count
+    count += 1
+
+
 for i in read:
 
     words = i.split()
@@ -142,6 +151,8 @@ for i in read:
         if(given_value<-2**11 or given_value> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
             break
+
+
         binary=imm_to_bin(int(i_list[2],12))
         binary+=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
     
@@ -172,6 +183,8 @@ for i in read:
         if(given_value<-2**20 or given_value> 2**20-1):
             print("ERROR:the immediate value is out of bounds")
             break
+
+
         imm=imm_to_bin(int(i_list[2]),21)
         binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
     
