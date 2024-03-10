@@ -105,6 +105,7 @@ for j in read:
     count += 1
 
 
+count = 1
 for i in read:
 
     words = i.split()
@@ -158,12 +159,19 @@ for i in read:
     
     #B Type
     elif i_list[0] in b_type:
-        given_value=int(i_list[3])
-        if(given_value<-2**12 or given_value> 2**12-1):
+
+        lab = -1
+        if(i_list[3] in labels):
+            lab =(count - labels[i_list[3]])*4
+        else:
+            print(f"ERROR on line {count}: No such Label Found {i_list[3]}")
+            break
+
+        if(lab<-2**12 or lab> 2**12-1):
             print("ERROR:the immediate value is out of bounds")
             break
         
-        binary=imm_to_bin(int(i_list[3]),13)
+        binary=imm_to_bin(lab,13)
         binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
         
     
