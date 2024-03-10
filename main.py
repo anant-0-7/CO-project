@@ -9,28 +9,28 @@ register_dict = {
     "t2": "00111",
     "s0": "01000",
     "s1": "01001",
-   "a0": "01010",
-   "a1": "01011",
-   "a2": "01100",  
-   "a3": "01101",
-   "a4": "01110",
-   "a5": "01111",
-   "a6": "10000",
-   "a7": "10001",
-   "s2": "10010",  
-   "s3": "10011",
-   "s4": "10100",
-   "s5": "10101",
-   "s6": "10110",
-   "s7": "10111",
-   "s8": "11000",
-   "s9": "11001",
-   "s10": "11010",
-   "s11": "11011",
-   "t3": "11100",  
-   "t4": "11101",
-   "t5": "11110",
-   "t6": "11111",
+    "a0": "01010",
+    "a1": "01011",
+    "a2": "01100",  
+    "a3": "01101",
+    "a4": "01110",
+    "a5": "01111",
+    "a6": "10000",
+    "a7": "10001",
+    "s2": "10010",  
+    "s3": "10011",
+    "s4": "10100",
+    "s5": "10101",
+    "s6": "10110",
+    "s7": "10111",
+    "s8": "11000",
+    "s9": "11001",
+    "s10": "11010",
+    "s11": "11011",
+    "t3": "11100",  
+    "t4": "11101",
+    "t5": "11110",
+    "t6": "11111",
 }
 
 r_type = {'add':"000", 'sub':"000", 'sll':"001",'slt':"010", 'sltu':"011", 'xor':"100", 'srl':"101", 'or':"110", 'and':"111"}
@@ -38,9 +38,9 @@ r_type = {'add':"000", 'sub':"000", 'sll':"001",'slt':"010", 'sltu':"011", 'xor'
 #Opcode is 0110011
 
 i_type = {"lw": ["0000011","010"], 
-          "addi": ["010011","000"], 
-          "sltiu": ["010011","011"], 
-          "jalr":["110011","000"]}
+          "addi": ["0010011","000"], 
+          "sltiu": ["0010011","011"], 
+          "jalr":["1100111","000"]}
 
 s_type = {"sw": ["0100011", "010"]}
 
@@ -108,7 +108,7 @@ for i in read:
     if '(' in i_list[-1]:
         inst = i_list[-1].split("(")
         i_list[2] = inst[1][0:-1]
-        i_list[3] = inst[0]
+        i_list.append(inst[0])
 
     
     #R Type instructions
@@ -142,7 +142,13 @@ for i in read:
             break
         
         binary = imm_to_bin(int(i_list[3]),12)
-        binary+= binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
+
+        s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
+
+    elif i_list[0] in s_type:
+        binary = imm_to_bin(int(i_list[3]),12)
+        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
+
     
     #S Type
     elif i_list[0] in s_type:
@@ -189,6 +195,7 @@ for i in read:
         
     # J TYPE
     elif i_list[0] in j_type:
+        
         igiven_value=int(i_list[2])
         if(given_value<-2**20 or given_value> 2**20-1):
             print("ERROR:the immediate value is out of bounds")
