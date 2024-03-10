@@ -11,15 +11,14 @@ register_dict = {
     "t2": "00111",
     "s0": "01000",
     "s1": "01001",
-   "s1": "01001",
    "a0": "01010",
    "a1": "01011",
    "a2": "01100",  
-   "a3": "01100",
-   "a4": "01100",
-   "a5": "01100",
-   "a6": "01100",
-   "a7": "01100",
+   "a3": "01101",
+   "a4": "01110",
+   "a5": "01111",
+   "a6": "10000",
+   "a7": "10001",
    "s2": "10010",  
    "s3": "10011",
    "s4": "10100",
@@ -35,6 +34,7 @@ register_dict = {
    "t5": "11110",
    "t6": "11111",
 }
+
 r_type = {'add':"000", 'sub':"000", 'sll':"001",'slt':"010", 'sltu':"011", 'xor':"100", 'srl':"101", 'or':"110", 'and':"111"}
 #Funct7 is all zero except in sub which is 0100000
 #Opcode is 0110011
@@ -117,22 +117,30 @@ for i in read:
     if i_list[0] in r_type:
         if i_list == "sub":
             binary = ""
-            binary += "0100000" + register_dict[i_list[1]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[3]]+"0110011"
+            binary += "0100000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
 
         else:
             binary = ""
-            binary += "0000000" + register_dict[i_list[1]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[3]]+"0110011"
+            binary += "0000000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
 
-    elif i_list[0] in i_type:
-        binary = imm_to_bin(int(i_list[3]),12)
-        s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
     
+    #I Type
+    elif i_list[0] in i_type:
+        binary = imm_to_bin(int(i_list[2]),12)
+        binary+=register_dict[i_list[3]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
+    
+    #S Type
     elif i_list[0] in s_type:
         binary=imm_to_bin(int(i_list[2],12))
-        binary=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:12]+s_type[i_list[0]][0]
+        binary+=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:12]+s_type[i_list[0]][0]
     
+    #B Type
+    elif i_list[0] in b_type:
+        binary=imm_to_bin(int(i_list[3]),13)
+        binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
+        
     if (i_list == []):
         continue
     print(i_list)
+    
 f.close()
- 
