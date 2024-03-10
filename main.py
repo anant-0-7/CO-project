@@ -1,5 +1,3 @@
-
-
 register_dict = {
    "zero": "00000",
    "ra": "00001",
@@ -11,14 +9,15 @@ register_dict = {
     "t2": "00111",
     "s0": "01000",
     "s1": "01001",
+
     "a0": "01010",
     "a1": "01011",
     "a2": "01100",  
-    "a3": "01100",
-    "a4": "01101",
+    "a3": "01101",
+    "a4": "01110",
     "a5": "01111",
-    "a6": "01100",
-    "a7": "01100",
+    "a6": "10000",
+    "a7": "10001",
     "s2": "10010",  
     "s3": "10011",
     "s4": "10100",
@@ -34,6 +33,7 @@ register_dict = {
     "t5": "11110",
     "t6": "11111",
 }
+
 r_type = {'add':"000", 'sub':"000", 'sll':"001",'slt':"010", 'sltu':"011", 'xor':"100", 'srl':"101", 'or':"110", 'and':"111"}
 #Funct7 is all zero except in sub which is 0100000
 #Opcode is 0110011
@@ -53,9 +53,6 @@ u_type = {"lui":"0110111", "auipc":"0010111"}
 
 j_type = {"jal": "1101111"}
 #no funct3
-
-
-
 
 def tows_complement(binary):
     ones_complement = ''
@@ -95,10 +92,10 @@ def imm_to_bin(a, no_of_bits):
         
     return binary1
 
-print(imm_to_bin(0, 10)) 
 
 f = open("text.txt","r")
 read = f.readlines()
+binary_output=" "
 for i in read:
 
     words = i.split()
@@ -122,8 +119,16 @@ for i in read:
             binary = ""
             binary += "0000000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
 
+    
+    #I Type
     elif i_list[0] in i_type:
+        given_value=int(i_list[3])
+        if(given_value<-2**11 or given_value> 2**11-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
+        
         binary = imm_to_bin(int(i_list[3]),12)
+
         s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
 
     elif i_list[0] in s_type:
@@ -131,8 +136,51 @@ for i in read:
         s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
 
     
+    #S Type
+    elif i_list[0] in s_type:
+        given_value=int(i_list[2])
+        if(given_value<-2**11 or given_value> 2**11-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
+        binary=imm_to_bin(int(i_list[2],12))
+        binary+=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
+    
+    #B Type
+    elif i_list[0] in b_type:
+        given_value=int(i_list[3])
+        if(given_value<-2**12 or given_value> 2**12-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
+        
+        binary=imm_to_bin(int(i_list[3]),13)
+        binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
+        
+    
+    #U TYPE
+    elif i_list[0] in u_type:
+        given_value=int(i_list[2])
+        if(given_value<-2**31 or given_value> 2**31-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
+        
+        imm=imm_to_bin(int(i_list[2]),32)
+        binary+=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
+        
+    # J TYPE
+    elif i_list[0] in j_type:
+        igiven_value=int(i_list[2])
+        if(given_value<-2**20 or given_value> 2**20-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
+        imm=imm_to_bin(int(i_list[2]),21)
+        binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
+    
+        
     if (i_list == []):
         continue
+    
     print(i_list)
+    binary_output=""
+    
+    
 f.close()
- 
