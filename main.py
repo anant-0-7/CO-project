@@ -45,7 +45,7 @@ i_type = {"lw": ["0000011","010"],
 s_type = {"sw": ["0100011", "010"]}
 
 b_type = {"beq": "000", "bne": "001", "blt": "100", "bge":"101", "bltu": "110", "bgeu": "111"}
-#opcode for all is 110001
+#opcode for all is 1100011
 
 u_type = {"lui":"0110111", "auipc":"0010111"}
 #No funct3 required
@@ -142,12 +142,12 @@ for i in read:
             break
         
         binary = imm_to_bin(int(i_list[3]),12)
+        binary= binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
 
-        s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
 
     elif i_list[0] in s_type:
         binary = imm_to_bin(int(i_list[3]),12)
-        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
+        binary= binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
 
     
     #S Type
@@ -162,7 +162,7 @@ for i in read:
             break
         
         binary=imm_to_bin(int(i_list[2],12))
-        binary+=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
+        binary=binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[3]]+"010"+binary[7:12]+s_type[i_list[0]][0]
     
     #B Type
     elif i_list[0] in b_type:
@@ -176,7 +176,8 @@ for i in read:
             break
         
         binary=imm_to_bin(int(i_list[3]),13)
-        binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
+        binary=binary[0]+binary[2:8]+register_dict[i_list[2]]+register_dict[i_list[1]]+b_type[i_list[0]]+binary[8:12]+binary[1]+"1100011"
+        
         
     
     #U TYPE
@@ -214,8 +215,9 @@ for i in read:
     if (i_list == []):
         continue
     
-    print(i_list)
-    binary_output=""
+    print(binary)
+    binary=""     
+    # this line is printing each output in new line by emptying it again else all will be output in one line
     
     
 f.close()
