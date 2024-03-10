@@ -176,6 +176,7 @@ for i in read:
         binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
     
         
+
     if (i_list == []):
         continue
     
