@@ -97,7 +97,7 @@ f = open("text.txt","r")
 read = f.readlines()
 binary_output=" "
 labels = {}
-count = 1
+count = 0
 for j in read:
     if ":" in j:
         index = j.index(":")
@@ -105,7 +105,7 @@ for j in read:
     count += 1
 
 
-count = 1
+count = 0
 for i in read:
 
     words = i.split()
@@ -164,11 +164,11 @@ for i in read:
         if(i_list[3] in labels):
             lab =(count - labels[i_list[3]])*4
         else:
-            print(f"ERROR on line {count}: No such Label Found {i_list[3]}")
+            print(f"ERROR on line {count+1}: No such Label Found {i_list[3]}")
             break
 
         if(lab<-2**12 or lab> 2**12-1):
-            print("ERROR:the immediate value is out of bounds")
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
         
         binary=imm_to_bin(lab,13)
@@ -179,7 +179,7 @@ for i in read:
     elif i_list[0] in u_type:
         given_value=int(i_list[2])
         if(given_value<-2**31 or given_value> 2**31-1):
-            print("ERROR:the immediate value is out of bounds")
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
         
         imm=imm_to_bin(int(i_list[2]),32)
@@ -189,13 +189,14 @@ for i in read:
     elif i_list[0] in j_type:
         igiven_value=int(i_list[2])
         if(given_value<-2**20 or given_value> 2**20-1):
-            print("ERROR:the immediate value is out of bounds")
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
 
 
         imm=imm_to_bin(int(i_list[2]),21)
         binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
     
+    count += 1
         
     if (i_list == []):
         continue
