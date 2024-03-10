@@ -1,5 +1,3 @@
-
-
 register_dict = {
    "zero": "00000",
    "ra": "00001",
@@ -54,9 +52,6 @@ u_type = {"lui":"0110111", "auipc":"0010111"}
 
 j_type = {"jal": "1101111"}
 #no funct3
-
-
-
 
 def tows_complement(binary):
     ones_complement = ''
@@ -139,10 +134,13 @@ for i in read:
         binary=imm_to_bin(int(i_list[3]),13)
         binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
         
+    
+    #U TYPE
     elif i_list[0] in u_type:
         imm=imm_to_bin(int(i_list[2]),32)
         binary+=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
         
+    # J TYPE
     elif i_list[0] in j_type:
         imm=imm_to_bin(int(i_list[2]),21)
         binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
@@ -150,8 +148,7 @@ for i in read:
         
     if (i_list == []):
         continue
+    
     print(i_list)
     
 f.close()
- 
-print(imm_to_bin(0, 10)) 
