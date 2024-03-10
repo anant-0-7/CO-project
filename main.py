@@ -156,7 +156,7 @@ for i in read:
         binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
 
     else:
-        print("Invalid Instruction") 
+        print("ERROR: Invalid Instruction") 
     if (i_list == []):
         continue
     print(i_list)
