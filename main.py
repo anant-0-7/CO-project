@@ -11,38 +11,37 @@ register_dict = {
     "t2": "00111",
     "s0": "01000",
     "s1": "01001",
-   "s1": "01001",
-   "a0": "01010",
-   "a1": "01011",
-   "a2": "01100",  
-   "a3": "01100",
-   "a4": "01100",
-   "a5": "01100",
-   "a6": "01100",
-   "a7": "01100",
-   "s2": "10010",  
-   "s3": "10011",
-   "s4": "10100",
-   "s5": "10101",
-   "s6": "10110",
-   "s7": "10111",
-   "s8": "11000",
-   "s9": "11001",
-   "s10": "11010",
-   "s11": "11011",
-   "t3": "11100",  
-   "t4": "11101",
-   "t5": "11110",
-   "t6": "11111",
+    "a0": "01010",
+    "a1": "01011",
+    "a2": "01100",  
+    "a3": "01100",
+    "a4": "01101",
+    "a5": "01111",
+    "a6": "01100",
+    "a7": "01100",
+    "s2": "10010",  
+    "s3": "10011",
+    "s4": "10100",
+    "s5": "10101",
+    "s6": "10110",
+    "s7": "10111",
+    "s8": "11000",
+    "s9": "11001",
+    "s10": "11010",
+    "s11": "11011",
+    "t3": "11100",  
+    "t4": "11101",
+    "t5": "11110",
+    "t6": "11111",
 }
 r_type = {'add':"000", 'sub':"000", 'sll':"001",'slt':"010", 'sltu':"011", 'xor':"100", 'srl':"101", 'or':"110", 'and':"111"}
 #Funct7 is all zero except in sub which is 0100000
 #Opcode is 0110011
 
 i_type = {"lw": ["0000011","010"], 
-          "addi": ["010011","000"], 
-          "sltiu": ["010011","011"], 
-          "jalr":["110011","000"]}
+          "addi": ["0010011","000"], 
+          "sltiu": ["0010011","011"], 
+          "jalr":["1100111","000"]}
 
 s_type = {"sw": ["0100011", "010"]}
 
@@ -110,22 +109,27 @@ for i in read:
     if '(' in i_list[-1]:
         inst = i_list[-1].split("(")
         i_list[2] = inst[1][0:-1]
-        i_list[3] = inst[0]
+        i_list.append(inst[0])
 
     
     #R Type instructions
     if i_list[0] in r_type:
         if i_list == "sub":
             binary = ""
-            binary += "0100000" + register_dict[i_list[1]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[3]]+"0110011"
+            binary += "0100000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
 
         else:
             binary = ""
-            binary += "0000000" + register_dict[i_list[1]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[3]]+"0110011"
+            binary += "0000000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
 
     elif i_list[0] in i_type:
         binary = imm_to_bin(int(i_list[3]),12)
         s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
+
+    elif i_list[0] in s_type:
+        binary = imm_to_bin(int(i_list[3]),12)
+        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
+
     
     elif i_list[0] in s_type:
         binary=imm_to_bin(int(i_list[2],12))
