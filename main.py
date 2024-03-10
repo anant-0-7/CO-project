@@ -121,27 +121,50 @@ for i in read:
     
     #I Type
     elif i_list[0] in i_type:
+        given_value=int(i_list[3])
+        if(given_value<-2**11 or given_value> 2**11-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
+        
         binary = imm_to_bin(int(i_list[3]),12)
         binary+= binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
     
     #S Type
     elif i_list[0] in s_type:
+        given_value=int(i_list[2])
+        if(given_value<-2**11 or given_value> 2**11-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
         binary=imm_to_bin(int(i_list[2],12))
         binary+=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:13]+s_type[i_list[0]][0]
     
     #B Type
     elif i_list[0] in b_type:
+        given_value=int(i_list[3])
+        if(given_value<-2**12 or given_value> 2**12-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
+        
         binary=imm_to_bin(int(i_list[3]),13)
         binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
         
     
     #U TYPE
     elif i_list[0] in u_type:
+        given_value=int(i_list[2])
+        if(given_value<-2**31 or given_value> 2**31-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
+        
         imm=imm_to_bin(int(i_list[2]),32)
         binary+=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
         
     # J TYPE
     elif i_list[0] in j_type:
+        igiven_value=int(i_list[2])
+        if(given_value<-2**20 or given_value> 2**20-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
         imm=imm_to_bin(int(i_list[2]),21)
         binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
     
@@ -150,5 +173,7 @@ for i in read:
         continue
     
     print(i_list)
+    binary_output=""
+    
     
 f.close()
