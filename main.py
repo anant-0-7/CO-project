@@ -112,7 +112,10 @@ for i in read:
         i_list[2] = inst[1][0:-1]
         i_list[3] = inst[0]
 
-    
+    if ":" in i:
+        print("There is a label here.")
+        continue
+
     #R Type instructions
     if i_list[0] in r_type:
         if i_list == "sub":
@@ -142,5 +145,6 @@ for i in read:
     if (i_list == []):
         continue
     print(i_list)
+    binary = ""
     
 f.close()
