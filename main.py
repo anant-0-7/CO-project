@@ -99,7 +99,20 @@ def imm_to_bin(a, no_of_bits):
 
 f = open("text.txt","r")
 read = f.readlines()
-binary_output=" "
+count = 1
+labels=[]
+for i in read:
+  s = ""
+  j = 0
+  while j < len(i):
+      if i[j] == ":":
+          labels.append(s)
+          s = ""
+          break
+      s += i[j]
+      j += 1
+
+
 for i in read:
 
     words = i.split()
