@@ -95,7 +95,6 @@ def imm_to_bin(a, no_of_bits):
 
 f = open("text.txt","r")
 read = f.readlines()
-binary_output=" "
 labels = {}
 count = 0
 for j in read:
@@ -199,8 +198,7 @@ for i in read:
     if (i_list == []):
         continue
     
-    print(i_list)
-    binary_output=""
+   
     
     
 f.close()
