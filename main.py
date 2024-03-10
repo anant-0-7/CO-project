@@ -38,7 +38,7 @@ r_type = {'add':"000", 'sub':"000", 'sll':"001",'slt':"010", 'sltu':"011", 'xor'
 #Funct7 is all zero except in sub which is 0100000
 #Opcode is 0110011
 
-i_type = {"lw": ["00000011","010"], 
+i_type = {"lw": ["0000011","010"], 
           "addi": ["0010011","000"], 
           "sltiu": ["0010011","011"], 
           "jalr":["1100111","000"]}
