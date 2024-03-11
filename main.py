@@ -102,13 +102,14 @@ for j in read:
     if ":" in j:
         index = j.index(":")
         labels[j[:index]]= lines
-        read[lines] = j[index+1:]
+        read[lines] = j[index+2:]
     lines += 1
-    if "beq zero,zero,0" ==read[lines-1]:
+    if "beq zero,zero,0" in read[lines-1]:
         is_hault = True
 
 
 count = 0
+output = []
 for i in read:
     if(not is_hault):
         print("ERROR: No Hault Present")
@@ -130,10 +131,12 @@ for i in read:
         if i_list[0] == "sub":
             binary = ""
             binary += "0100000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
+            output.append(binary)
 
         else:
             binary = ""
             binary += "0000000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
+            output.append(binary)
 
     
     #I Type
@@ -146,6 +149,7 @@ for i in read:
         binary = imm_to_bin(int(i_list[3]),12)
 
         s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
+        output.append(s)
 
     #S Type
     elif i_list[0] in s_type:
@@ -156,6 +160,7 @@ for i in read:
 
         binary = imm_to_bin(int(i_list[3]),12)
         s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][1]+binary[7:13]+ "0100011"
+        output.append(s)
 
     
     #B Type
@@ -187,6 +192,8 @@ for i in read:
         binary=imm_to_bin(lab,13)
         s=binary=binary[0]+binary[2:8]+register_dict[i_list[2]]+register_dict[i_list[1]]+b_type[i_list[0]]+binary[8:12]+binary[1]+"1100011"        
     
+        output.append(s)    
+
     #U TYPE
     elif i_list[0] in u_type:
         given_value=int(i_list[2])
@@ -196,6 +203,7 @@ for i in read:
         
         imm=imm_to_bin(int(i_list[2]),32)
         s=imm[0:20]+register_dict[i_list[1]]+u_type[i_list[0]]
+        output.append(s)
         
     # J TYPE
     elif i_list[0] in j_type:
@@ -207,6 +215,7 @@ for i in read:
 
         imm=imm_to_bin(int(i_list[2]),21)
         s=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
+        output.append(s)
     
     count += 1
 
