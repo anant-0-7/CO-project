@@ -149,13 +149,20 @@ for i in read:
 
 
         binary = imm_to_bin(int(i_list[3]),12)
-        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
+        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][1]+binary[7:13]+ "0100011"
 
     
     #B Type
     elif i_list[0] in b_type:
 
         lab = -1
+        try:
+            i_list[3] = int(i_list[3])
+
+        except ValueError:
+            i_list[3] = i_list[3]
+
+
         if(type(i_list[3])==str):
             if(i_list[3] in labels):
                 lab =(labels[i_list[3]]-count)*4
@@ -182,7 +189,7 @@ for i in read:
             break
         
         imm=imm_to_bin(int(i_list[2]),32)
-        s=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
+        s=imm[0:20]+register_dict[i_list[1]]+u_type[i_list[0]]
         
     # J TYPE
     elif i_list[0] in j_type:
