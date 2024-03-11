@@ -125,6 +125,12 @@ for i in read:
         break
 
     words = i.split()
+
+    if(len(words)!=2 and len(words)!=0):
+        print("True")
+        print("ERROR: Invalid Instructione")
+        break
+    
     i_list = []
     for word in words:
         i_list.extend(word.split(","))
