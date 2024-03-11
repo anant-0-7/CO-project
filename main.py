@@ -141,6 +141,10 @@ for i in read:
     
     #R Type instructions
     if i_list[0] in r_type:
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
+
         if(i_list[1] not in register_dict or i_list[2] not in register_dict or i_list[3] not in register_dict):
             print("ERROR: registers not defined")
             break
@@ -159,6 +163,11 @@ for i in read:
     
     #I Type
     elif i_list[0] in i_type:
+
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
+
         given_value=int(i_list[3])
         if(given_value<-2**11 or given_value> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
@@ -175,6 +184,11 @@ for i in read:
 
     #S Type
     elif i_list[0] in s_type:
+
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
+
         if(int(i_list[3])<-2**11 or int(i_list[3])> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
             break
@@ -191,6 +205,10 @@ for i in read:
     
     #B Type
     elif i_list[0] in b_type:
+
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
 
         lab = -1
         try:
@@ -225,6 +243,11 @@ for i in read:
 
     #U TYPE
     elif i_list[0] in u_type:
+
+        if len(i_list)!= 3:
+            print(f"ERROR: in line {count+1}")
+            break
+
         given_value=int(i_list[2])
         if(given_value<-2**31 or given_value> 2**31-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
@@ -240,6 +263,11 @@ for i in read:
         
     # J TYPE
     elif i_list[0] in j_type:
+
+        if len(i_list)!= 3:
+            print(f"ERROR: in line {count+1}")
+            break
+
         lab = -1
         try:
             i_list[2] = int(i_list[2])
