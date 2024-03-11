@@ -209,6 +209,10 @@ for i in read:
         imm=imm_to_bin(int(i_list[2]),21)
         binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
         
+    elif i_list[0]== "beq" and i_list[1]== "zero" and i_list[2]=="zero" and i_list[3]=="0":
+        print("00000000000000000000000001100011")
+        
+#above elif condition is for virtual halt instructions
     
     
         
