@@ -131,7 +131,7 @@ for i in read:
     
     #R Type instructions
     if i_list[0] in r_type:
-        if(i_list[1] not in register_list or i_list[2] not in register_list or i_list[3] not in register_list):
+        if(i_list[1] not in register_dict or i_list[2] not in register_dict or i_list[3] not in register_dict):
             print("ERROR: registers not defined")
             break
         
@@ -154,7 +154,7 @@ for i in read:
             print("ERROR:the immediate value is out of bounds")
             break
 
-       if(i_list[1] not in register_list or i_list[2] not in register_list ):
+        if(i_list[1] not in register_dict or i_list[2] not in register_dict ):
             print("ERROR: registers not defined")
             break
           
@@ -169,7 +169,7 @@ for i in read:
             print("ERROR:the immediate value is out of bounds")
             break
 
-         if(i_list[1] not in register_list or i_list[2] not in register_list):
+        if(i_list[1] not in register_dict or i_list[2] not in register_dict):
             print("ERROR: registers not defined")
             break
 
@@ -205,7 +205,7 @@ for i in read:
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
            
-        if(i_list[1] not in register_list or i_list[2] not in register_list):
+        if(i_list[1] not in register_dict or i_list[2] not in register_dict):
             print("ERROR: registers not defined")
             break
         
@@ -221,7 +221,7 @@ for i in read:
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
 
-        if(i_list[1] not in register_list):
+        if(i_list[1] not in register_dict):
                      print("ERROR: registers not defined")
                      break
         
@@ -236,7 +236,7 @@ for i in read:
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
            
-        if(i_list[1] not in register_list):
+        if(i_list[1] not in register_dict):
             print("ERROR: registers not defined")
             break
 
@@ -249,7 +249,7 @@ for i in read:
 
 
    
-    if (count == lines):
+if (count == lines):
     with open('stdout.txt', 'w') as f:
         for item in output:
             f.write(item + '\n')
