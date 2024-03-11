@@ -119,12 +119,12 @@ for i in read:
     i_list = []
     for word in words:
         i_list.extend(word.split(","))
-    if(len(i_list) != 0):
+    if(len(i_list) != 0):   #check whether the line is not empty
         if '(' in i_list[-1]:
             inst = i_list[-1].split("(")
             i_list[2] = inst[1][0:-1]
             i_list[3] = inst[0]
-    else:
+    else:   #if line is empty then continue
         continue
     if ":" in i:
         print("There is a label here.")
