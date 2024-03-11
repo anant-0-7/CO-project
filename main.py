@@ -9,7 +9,6 @@ register_dict = {
     "t2": "00111",
     "s0": "01000",
     "s1": "01001",
-
     "a0": "01010",
     "a1": "01011",
     "a2": "01100",  
@@ -159,7 +158,6 @@ for i in read:
         if(int(i_list[3])<-2**11 or int(i_list[3])> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
             break
-
 
         binary = imm_to_bin(int(i_list[3]),12)
         s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][1]+binary[7:13]+ "0100011"
