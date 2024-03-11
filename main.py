@@ -169,7 +169,7 @@ for i in read:
             print("ERROR:the immediate value is out of bounds")
             break
 
-         if(i_list[1] not in register_list or i_list[3] not in register_list):
+         if(i_list[1] not in register_list or i_list[2] not in register_list):
             print("ERROR: registers not defined")
             break
 
