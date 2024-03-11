@@ -146,10 +146,15 @@ for i in read:
         binary = imm_to_bin(int(i_list[2]),12)
         binary+=register_dict[i_list[3]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
     
-    #S Type
+       #S Type
     elif i_list[0] in s_type:
-        binary=imm_to_bin(int(i_list[2],12))
-        binary+=binary[0:7]+register_dict[i_list[3]]+register_dict[i_list[1]]+"010"+binary[7:12]+s_type[i_list[0]][0]
+        if(int(i_list[3])<-2**11 or int(i_list[3])> 2**11-1):
+            print("ERROR:the immediate value is out of bounds")
+            break
+
+
+        binary1 = imm_to_bin(int(i_list[3]),12)
+        binary = binary1[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][1]+binary1[7:12]+ "0100011"
     
     #B Type
     elif i_list[0] in b_type:
