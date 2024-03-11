@@ -121,6 +121,7 @@ for i in read:
         i_list.extend(word.split(","))
 
     if (i_list == []):
+        count += 1
         continue
 
     if '(' in i_list[-1]:
