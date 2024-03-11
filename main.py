@@ -104,7 +104,7 @@ for j in read:
         labels[j[:index]]= lines
         read[lines] = j[index+1:]
     lines += 1
-    if "beq zero,zero,0x00000000" ==read[lines]:
+    if "beq zero,zero,0" ==read[lines-1]:
         is_hault = True
 
 
