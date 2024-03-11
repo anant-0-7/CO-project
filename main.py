@@ -131,6 +131,11 @@ for i in read:
     
     #R Type instructions
     if i_list[0] in r_type:
+        if(i_list[1] not in register_list or i_list[2] not in register_list or i_list[3] not in register_list):
+            print("ERROR: registers not defined")
+            break
+        
+        
         if i_list[0] == "sub":
             binary = ""
             binary += "0100000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
@@ -148,7 +153,11 @@ for i in read:
         if(given_value<-2**11 or given_value> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
             break
-        
+
+       if(i_list[1] not in register_list or i_list[2] not in register_list ):
+            print("ERROR: registers not defined")
+            break
+          
         binary = imm_to_bin(int(i_list[3]),12)
 
         s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
@@ -158,6 +167,10 @@ for i in read:
     elif i_list[0] in s_type:
         if(int(i_list[3])<-2**11 or int(i_list[3])> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
+            break
+
+         if(i_list[1] not in register_list or i_list[3] not in register_list):
+            print("ERROR: registers not defined")
             break
 
 
@@ -191,6 +204,10 @@ for i in read:
         if(lab<-2**12 or lab> 2**12-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
+           
+        if(i_list[1] not in register_list or i_list[2] not in register_list):
+            print("ERROR: registers not defined")
+            break
         
         binary=imm_to_bin(lab,13)
         s=binary=binary[0]+binary[2:8]+register_dict[i_list[2]]+register_dict[i_list[1]]+b_type[i_list[0]]+binary[8:12]+binary[1]+"1100011"        
@@ -203,6 +220,10 @@ for i in read:
         if(given_value<-2**31 or given_value> 2**31-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
+
+        if(i_list[1] not in register_list):
+                     print("ERROR: registers not defined")
+                     break
         
         imm=imm_to_bin(int(i_list[2]),32)
         s=imm[0:20]+register_dict[i_list[1]]+u_type[i_list[0]]
@@ -213,6 +234,10 @@ for i in read:
         igiven_value=int(i_list[2])
         if(given_value<-2**20 or given_value> 2**20-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
+            break
+           
+        if(i_list[1] not in register_list):
+            print("ERROR: registers not defined")
             break
 
 
