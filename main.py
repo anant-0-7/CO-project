@@ -93,7 +93,7 @@ def imm_to_bin(a, no_of_bits):
     return binary1
 
 
-f = open("text.txt","r")
+f = open("stdin.txt","r")
 read = f.readlines()
 labels = {}
 lines = 0
