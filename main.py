@@ -1,3 +1,12 @@
+import sys
+
+
+if __name__ == "__main__":
+    input_file_path = sys.argv[1]
+    output_file_path = sys.argv[2]
+
+
+
 register_dict = {
    "zero": "00000",
    "ra": "00001",
@@ -93,7 +102,7 @@ def imm_to_bin(a, no_of_bits):
     return binary1
 
 
-f = open("text.txt","r")
+f = open(input_file_path,"r")
 read = f.readlines()
 labels = {}
 lines = 0
@@ -249,7 +258,7 @@ for i in read:
 
    
 if (count == lines):
-    with open('stdout.txt', 'w') as f:
+    with open(output_file_path, 'w') as f:
         for item in output:
             f.write(item + '\n')
    
