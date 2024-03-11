@@ -156,11 +156,21 @@ for i in read:
         binary=imm_to_bin(int(i_list[3]),13)
         binary+=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
 
+    #U TYPE
+    elif i_list[0] in u_type:
+        given_value=int(i_list[2])
+        if(given_value<-2**31 or given_value> 2**31-1):
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
+            break
+        
+        imm=imm_to_bin(int(i_list[2]),32)
+        binary=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
+
     else:
         print("ERROR: Invalid Instruction")
     if (i_list == []):
         continue
-    print(i_list)
+    print(binary)
     binary = ""
     
 f.close()
