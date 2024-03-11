@@ -222,7 +222,6 @@ for i in read:
 
 if (count == lines):
     with open('stdout.txt', 'w') as f:
-    # Iterate over the elements of the list
         for item in output:
             f.write(item + '\n')
    
