@@ -115,7 +115,7 @@ for i in read:
     #R Type instructions
     if i_list[0] in r_type:
         
-        if((i_list[3] or i_list[2] or i_list[1])not in register_list):
+        if(i_list[1] not in register_list or i_list[2] not in register_list or i_list[3] not in register_list):
             print("ERROR: registers not defined")
             break
         
@@ -138,7 +138,7 @@ for i in read:
             print("ERROR:the immediate value is out of bounds")
             break
         
-        if((i_list[2] or i_list[1])not in register_list):
+        if(i_list[1] not in register_list or i_list[2] not in register_list ):
             print("ERROR: registers not defined")
             break
         
@@ -158,7 +158,7 @@ for i in read:
             print("ERROR:the immediate value is out of bounds")
             break
         
-        if((i_list[3] or i_list[1])not in register_list):
+        if(i_list[1] not in register_list or i_list[3] not in register_list):
             print("ERROR: registers not defined")
             break
         
@@ -173,7 +173,7 @@ for i in read:
             print("ERROR:the immediate value is out of bounds")
             break
         
-        if((i_list[2] or i_list[1])not in register_list):
+        if(i_list[1] not in register_list or i_list[2] not in register_list):
             print("ERROR: registers not defined")
             break
         
@@ -189,7 +189,7 @@ for i in read:
             print("ERROR:the immediate value is out of bounds")
             break
         
-        if(i_list[1]not in register_list):
+        if(i_list[1] not in register_list):
             print("ERROR: registers not defined")
             break
         
@@ -204,7 +204,7 @@ for i in read:
             print("ERROR:the immediate value is out of bounds")
             break
         
-        if(i_list[1]not in register_list):
+        if(i_list[1] not in register_list):
             print("ERROR: registers not defined")
             break
         
@@ -212,13 +212,6 @@ for i in read:
         binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
         
     
-    elif i_list[0]== "beq" and i_list[1]== "zero" and i_list[2]=="zero" and i_list[3]=="0":
-        print("00000000000000000000000001100011")
-        
-#above elif condition is for virtual halt instructions
-    
-    
-        
     if (i_list == []):
         continue
     
