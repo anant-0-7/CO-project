@@ -249,10 +249,10 @@ for i in read:
 
 
    
-    if (count == lines):
-        with open('stdout.txt', 'w') as f:
-            for item in output:
-                f.write(item + '\n')
+if (count == lines):
+    with open('stdout.txt', 'w') as f:
+        for item in output:
+            f.write(item + '\n')
    
     
     
