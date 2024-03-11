@@ -166,6 +166,17 @@ for i in read:
         imm=imm_to_bin(int(i_list[2]),32)
         binary=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
 
+    # J TYPE
+    elif i_list[0] in j_type:
+        given_value=int(i_list[2])
+        if(given_value<-2**20 or given_value> 2**20-1):
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
+            break
+
+
+        imm=imm_to_bin(int(i_list[2]),21)
+        binary=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
+
     else:
         print("ERROR: Invalid Instruction")
     if (i_list == []):
