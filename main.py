@@ -1,3 +1,12 @@
+import sys
+
+
+if __name__ == "__main__":
+    input_file_path = sys.argv[1]
+    output_file_path = sys.argv[2]
+
+
+
 register_dict = {
    "zero": "00000",
    "ra": "00001",
@@ -93,7 +102,7 @@ def imm_to_bin(a, no_of_bits):
     return binary1
 
 
-f = open("stdin.txt","r")
+f = open(input_file_path,"r")
 read = f.readlines()
 labels = {}
 lines = 0
@@ -132,6 +141,10 @@ for i in read:
     
     #R Type instructions
     if i_list[0] in r_type:
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
+
         if(i_list[1] not in register_dict or i_list[2] not in register_dict or i_list[3] not in register_dict):
             print("ERROR: registers not defined")
             break
@@ -150,6 +163,11 @@ for i in read:
     
     #I Type
     elif i_list[0] in i_type:
+
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
+
         given_value=int(i_list[3])
         if(given_value<-2**11 or given_value> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
@@ -166,6 +184,11 @@ for i in read:
 
     #S Type
     elif i_list[0] in s_type:
+
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
+
         if(int(i_list[3])<-2**11 or int(i_list[3])> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
             break
@@ -182,6 +205,10 @@ for i in read:
     
     #B Type
     elif i_list[0] in b_type:
+
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
 
         lab = -1
         try:
@@ -212,11 +239,15 @@ for i in read:
         
         binary=imm_to_bin(lab,13)
         s=binary=binary[0]+binary[2:8]+register_dict[i_list[2]]+register_dict[i_list[1]]+b_type[i_list[0]]+binary[8:12]+binary[1]+"1100011"        
-    
         output.append(s)    
 
     #U TYPE
     elif i_list[0] in u_type:
+
+        if len(i_list)!= 3:
+            print(f"ERROR: in line {count+1}")
+            break
+
         given_value=int(i_list[2])
         if(given_value<-2**31 or given_value> 2**31-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
@@ -232,7 +263,35 @@ for i in read:
         
     # J TYPE
     elif i_list[0] in j_type:
-        given_value=int(i_list[2])
+
+        if len(i_list)!= 3:
+            print(f"ERROR: in line {count+1}")
+            break
+
+        lab = -1
+        try:
+            i_list[2] = int(i_list[2])
+
+        except ValueError:
+            i_list[2] = i_list[2]
+
+
+        if(type(i_list[2])==str):
+            if(i_list[2] in labels):
+                lab =(labels[i_list[2]]-count)*4
+            else:
+                print(f"ERROR on line {count+1}: No such Label Found {i_list[2]}")
+                break
+
+
+        elif type(i_list[2]==int):
+            lab = i_list[2]
+        
+        if(lab<-2**20 or lab> 2**20-1):
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
+            break
+
+
         if(given_value<-2**20 or given_value> 2**20-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
@@ -245,13 +304,17 @@ for i in read:
         imm=imm_to_bin(int(i_list[2]),21)
         s=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
         output.append(s)
-    
+
+    else:
+        print("ERROR: Invalid Instruction")
+        break        
+
     count += 1
 
 
    
 if (count == lines):
-    with open('stdout.txt', 'w') as f:
+    with open(output_file_path, 'w') as f:
         for item in output:
             f.write(item + '\n')
    
