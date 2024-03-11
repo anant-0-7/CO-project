@@ -120,6 +120,9 @@ for i in read:
     for word in words:
         i_list.extend(word.split(","))
 
+    if (i_list == []):
+        continue
+
     if '(' in i_list[-1]:
         inst = i_list[-1].split("(")
         i_list[2] = inst[1][0:-1]
@@ -220,8 +223,7 @@ for i in read:
     count += 1
 
 
-    if (i_list == []):
-        continue
+   
     
    
     
