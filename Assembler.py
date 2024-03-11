@@ -107,6 +107,7 @@ read = f.readlines()
 labels = {}
 lines = 0
 is_hault = False
+hault_no = 0
 for j in read:
     if ":" in j:
         index = j.index(":")
@@ -115,11 +116,16 @@ for j in read:
     lines += 1
     if "beq zero,zero,0" in read[lines-1]:
         is_hault = True
+        hault_no +=1
 
 
 count = 0
 output = []
 for i in read:
+    if(hault_no != 1):
+        print("ERROR: More than 1 haults present")
+        break
+
     if(not is_hault):
         print("ERROR: No Hault Present")
         break
@@ -130,7 +136,7 @@ for i in read:
         print("True")
         print("ERROR: Invalid Instructione")
         break
-    
+
     i_list = []
     for word in words:
         i_list.extend(word.split(","))
