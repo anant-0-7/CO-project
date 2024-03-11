@@ -122,7 +122,7 @@ for j in read:
 count = 0
 output = []
 for i in read:
-    if(hault_no != 1):
+    if(hault_no > 1):
         print("ERROR: More than 1 haults present")
         break
 
