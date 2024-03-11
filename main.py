@@ -109,6 +109,7 @@ for i in read:
         inst = i_list[-1].split("(")
         i_list[2] = inst[1][0:-1]
         i_list.append(inst[0])
+        
 
     
     #R Type instructions
@@ -161,8 +162,9 @@ for i in read:
             print("ERROR: registers not defined")
             break
         
-        binary=imm_to_bin(int(i_list[2],12))
-        binary=binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[3]]+"010"+binary[7:12]+s_type[i_list[0]][0]
+        binary1 = imm_to_bin(int(i_list[3]),12)
+        binary = binary1[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][1]+binary1[7:12]+ "0100011"
+
     
     #B Type
     elif i_list[0] in b_type:
@@ -209,6 +211,7 @@ for i in read:
         imm=imm_to_bin(int(i_list[2]),21)
         binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
         
+    
     elif i_list[0]== "beq" and i_list[1]== "zero" and i_list[2]=="zero" and i_list[3]=="0":
         print("00000000000000000000000001100011")
         
