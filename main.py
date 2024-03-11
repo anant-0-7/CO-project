@@ -96,13 +96,13 @@ def imm_to_bin(a, no_of_bits):
 f = open("text.txt","r")
 read = f.readlines()
 labels = {}
-count = 0
+lines = 0
 for j in read:
     if ":" in j:
         index = j.index(":")
-        labels[j[:index]]= count
-        read[count] = j[index+1:]
-    count += 1
+        labels[j[:index]]= lines
+        read[lines] = j[index+1:]
+    lines += 1
 
 
 count = 0
@@ -157,7 +157,7 @@ for i in read:
 
         lab = -1
         if(i_list[3] in labels):
-            lab =(count - labels[i_list[3]])*4
+            lab =(labels[i_list[3]]-count)*4
         else:
             print(f"ERROR on line {count+1}: No such Label Found {i_list[3]}")
             break
@@ -167,8 +167,7 @@ for i in read:
             break
         
         binary=imm_to_bin(lab,13)
-        s=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
-        
+        s=binary=binary[0]+binary[2:8]+register_dict[i_list[2]]+register_dict[i_list[1]]+b_type[i_list[0]]+binary[8:12]+binary[1]+"1100011"        
     
     #U TYPE
     elif i_list[0] in u_type:
