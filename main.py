@@ -1,3 +1,12 @@
+import sys
+
+
+if __name__ == "__main__":
+    input_file_path = sys.argv[1]
+    output_file_path = sys.argv[2]
+
+
+
 register_dict = {
    "zero": "00000",
    "ra": "00001",
@@ -9,6 +18,7 @@ register_dict = {
     "t2": "00111",
     "s0": "01000",
     "s1": "01001",
+
     "a0": "01010",
     "a1": "01011",
     "a2": "01100",  
@@ -45,16 +55,13 @@ i_type = {"lw": ["0000011","010"],
 s_type = {"sw": ["0100011", "010"]}
 
 b_type = {"beq": "000", "bne": "001", "blt": "100", "bge":"101", "bltu": "110", "bgeu": "111"}
-#opcode for all is 1100011
+#opcode for all is 110001
 
 u_type = {"lui":"0110111", "auipc":"0010111"}
 #No funct3 required
 
 j_type = {"jal": "1101111"}
 #no funct3
-
-register_list=['zero','ra','sp','gp','tp','t0','t1','t2','s0','s1','a0','a1','a2','a3','a4','a5','a6','a7','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','t3','t4','t5','t6']
-
 
 def tows_complement(binary):
     ones_complement = ''
@@ -95,129 +102,222 @@ def imm_to_bin(a, no_of_bits):
     return binary1
 
 
-f = open("demo.txt","r")
+f = open(input_file_path,"r")
 read = f.readlines()
-binary_output=" "
+labels = {}
+lines = 0
+is_hault = False
+for j in read:
+    if ":" in j:
+        index = j.index(":")
+        labels[j[:index]]= lines
+        read[lines] = j[index+2:]
+    lines += 1
+    if "beq zero,zero,0" in read[lines-1]:
+        is_hault = True
+
+
+count = 0
+output = []
 for i in read:
+    if(not is_hault):
+        print("ERROR: No Hault Present")
+        break
 
     words = i.split()
     i_list = []
     for word in words:
         i_list.extend(word.split(","))
 
+    if (i_list == []):
+        count += 1
+        continue
+
     if '(' in i_list[-1]:
         inst = i_list[-1].split("(")
         i_list[2] = inst[1][0:-1]
         i_list.append(inst[0])
-        
 
     
     #R Type instructions
     if i_list[0] in r_type:
-        
-        if(i_list[1] not in register_list or i_list[2] not in register_list or i_list[3] not in register_list):
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
+
+        if(i_list[1] not in register_dict or i_list[2] not in register_dict or i_list[3] not in register_dict):
             print("ERROR: registers not defined")
             break
         
-        if i_list == "sub":
+        
+        if i_list[0] == "sub":
             binary = ""
             binary += "0100000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
-            
+            output.append(binary)
 
         else:
             binary = ""
             binary += "0000000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
-            
+            output.append(binary)
 
     
     #I Type
     elif i_list[0] in i_type:
-        
+
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
+
         given_value=int(i_list[3])
         if(given_value<-2**11 or given_value> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
             break
-        
-        if(i_list[1] not in register_list or i_list[2] not in register_list ):
+
+        if(i_list[1] not in register_dict or i_list[2] not in register_dict ):
             print("ERROR: registers not defined")
             break
-        
+          
         binary = imm_to_bin(int(i_list[3]),12)
-        binary= binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
 
+        s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
+        output.append(s)
 
-    elif i_list[0] in s_type:
-        binary = imm_to_bin(int(i_list[3]),12)
-        binary= binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
-
-    
     #S Type
     elif i_list[0] in s_type:
-        given_value=int(i_list[2])
-        if(given_value<-2**11 or given_value> 2**11-1):
+
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
+            break
+
+        if(int(i_list[3])<-2**11 or int(i_list[3])> 2**11-1):
             print("ERROR:the immediate value is out of bounds")
             break
-        
-        if(i_list[1] not in register_list or i_list[3] not in register_list):
+
+        if(i_list[1] not in register_dict or i_list[2] not in register_dict):
             print("ERROR: registers not defined")
             break
-        
-        binary1 = imm_to_bin(int(i_list[3]),12)
-        binary = binary1[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][1]+binary1[7:12]+ "0100011"
+
+
+        binary = imm_to_bin(int(i_list[3]),12)
+        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][1]+binary[7:13]+ "0100011"
+        output.append(s)
 
     
     #B Type
     elif i_list[0] in b_type:
-        given_value=int(i_list[3])
-        if(given_value<-2**12 or given_value> 2**12-1):
-            print("ERROR:the immediate value is out of bounds")
+
+        if len(i_list)!= 4:
+            print(f"ERROR: in line {count+1}")
             break
+
+        lab = -1
+        try:
+            i_list[3] = int(i_list[3])
+
+        except ValueError:
+            i_list[3] = i_list[3]
+
+
+        if(type(i_list[3])==str):
+            if(i_list[3] in labels):
+                lab =(labels[i_list[3]]-count)*4
+            else:
+                print(f"ERROR on line {count+1}: No such Label Found {i_list[3]}")
+                break
+
+
+        elif type(i_list[3]==int):
+            lab = i_list[3]
         
-        if(i_list[1] not in register_list or i_list[2] not in register_list):
+        if(lab<-2**12 or lab> 2**12-1):
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
+            break
+           
+        if(i_list[1] not in register_dict or i_list[2] not in register_dict):
             print("ERROR: registers not defined")
             break
         
-        binary=imm_to_bin(int(i_list[3]),13)
-        binary=binary[0]+binary[2:8]+register_dict[i_list[2]]+register_dict[i_list[1]]+b_type[i_list[0]]+binary[8:12]+binary[1]+"1100011"
-        
-        
-    
+        binary=imm_to_bin(lab,13)
+        s=binary=binary[0]+binary[2:8]+register_dict[i_list[2]]+register_dict[i_list[1]]+b_type[i_list[0]]+binary[8:12]+binary[1]+"1100011"        
+        output.append(s)    
+
     #U TYPE
     elif i_list[0] in u_type:
+
+        if len(i_list)!= 3:
+            print(f"ERROR: in line {count+1}")
+            break
+
         given_value=int(i_list[2])
         if(given_value<-2**31 or given_value> 2**31-1):
-            print("ERROR:the immediate value is out of bounds")
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
-        
-        if(i_list[1] not in register_list):
-            print("ERROR: registers not defined")
-            break
+
+        if(i_list[1] not in register_dict):
+                     print("ERROR: registers not defined")
+                     break
         
         imm=imm_to_bin(int(i_list[2]),32)
-        binary+=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
+        s=imm[0:20]+register_dict[i_list[1]]+u_type[i_list[0]]
+        output.append(s)
         
     # J TYPE
     elif i_list[0] in j_type:
-        
-        igiven_value=int(i_list[2])
-        if(given_value<-2**20 or given_value> 2**20-1):
-            print("ERROR:the immediate value is out of bounds")
+
+        if len(i_list)!= 3:
+            print(f"ERROR: in line {count+1}")
             break
+
+        lab = -1
+        try:
+            i_list[2] = int(i_list[2])
+
+        except ValueError:
+            i_list[2] = i_list[2]
+
+
+        if(type(i_list[2])==str):
+            if(i_list[2] in labels):
+                lab =(labels[i_list[2]]-count)*4
+            else:
+                print(f"ERROR on line {count+1}: No such Label Found {i_list[2]}")
+                break
+
+
+        elif type(i_list[2]==int):
+            lab = i_list[2]
         
-        if(i_list[1] not in register_list):
+        if(lab<-2**20 or lab> 2**20-1):
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
+            break
+
+
+        if(given_value<-2**20 or given_value> 2**20-1):
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
+            break
+           
+        if(i_list[1] not in register_dict):
             print("ERROR: registers not defined")
             break
-        
+
+
         imm=imm_to_bin(int(i_list[2]),21)
-        binary+=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
-        
-    
-    if (i_list == []):
-        continue
-    
-    print(binary)
-    binary=""     
-    # this line is printing each output in new line by emptying it again else all will be output in one line
+        s=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
+        output.append(s)
+
+    else:
+        print("ERROR: Invalid Instruction")
+        break        
+
+    count += 1
+
+
+   
+if (count == lines):
+    with open(output_file_path, 'w') as f:
+        for item in output:
+            f.write(item + '\n')
+   
     
     
 f.close()
