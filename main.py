@@ -211,7 +211,6 @@ for i in read:
         
         binary=imm_to_bin(lab,13)
         s=binary=binary[0]+binary[2:8]+register_dict[i_list[2]]+register_dict[i_list[1]]+b_type[i_list[0]]+binary[8:12]+binary[1]+"1100011"        
-    
         output.append(s)    
 
     #U TYPE
