@@ -133,8 +133,7 @@ for i in read:
     words = i.split()
 
     if(len(words)!=2 and len(words)!=0):
-        print("True")
-        print("ERROR: Invalid Instructione")
+        print("ERROR: Invalid Instruction")
         break
 
     i_list = []
