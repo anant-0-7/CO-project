@@ -108,7 +108,7 @@ for j in read:
         is_hault = True
 
 
-count = 1
+count = 0
 output = []
 for i in read:
     if(not is_hault):
