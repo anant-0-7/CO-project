@@ -220,7 +220,7 @@ for i in read:
     
     count += 1
 
-# if (count == lines):
+if (count == lines):
     with open('stdout.txt', 'w') as f:
     # Iterate over the elements of the list
         for item in output:
