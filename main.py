@@ -96,22 +96,32 @@ def imm_to_bin(a, no_of_bits):
 f = open("text.txt","r")
 read = f.readlines()
 labels = {}
-count = 0
+lines = 0
+is_hault = False
 for j in read:
     if ":" in j:
         index = j.index(":")
-        labels[j[:index]]= count
-        read[count] = j[index+1:]
-    count += 1
+        labels[j[:index]]= lines
+        read[lines] = j[index+2:]
+    lines += 1
+    if "beq zero,zero,0" in read[lines-1]:
+        is_hault = True
 
 
 count = 0
+output = []
 for i in read:
+    if(not is_hault):
+        print("ERROR: No Hault Present")
+        break
 
     words = i.split()
     i_list = []
     for word in words:
         i_list.extend(word.split(","))
+
+    if (i_list == []):
+        continue
 
     if '(' in i_list[-1]:
         inst = i_list[-1].split("(")
@@ -121,13 +131,15 @@ for i in read:
     
     #R Type instructions
     if i_list[0] in r_type:
-        if i_list == "sub":
+        if i_list[0] == "sub":
             binary = ""
             binary += "0100000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
+            output.append(binary)
 
         else:
             binary = ""
             binary += "0000000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
+            output.append(binary)
 
     
     #I Type
@@ -140,6 +152,7 @@ for i in read:
         binary = imm_to_bin(int(i_list[3]),12)
 
         s = binary + register_dict[i_list[2]] + i_type[i_list[0]][1] + register_dict[i_list[1]] + i_type[i_list[0]][0]
+        output.append(s)
 
     #S Type
     elif i_list[0] in s_type:
@@ -149,27 +162,41 @@ for i in read:
 
 
         binary = imm_to_bin(int(i_list[3]),12)
-        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][0]+binary[7:13]+ "0100011"
+        s = binary[0:7]+register_dict[i_list[1]]+register_dict[i_list[2]]+s_type[i_list[0]][1]+binary[7:13]+ "0100011"
+        output.append(s)
 
     
     #B Type
     elif i_list[0] in b_type:
 
         lab = -1
-        if(i_list[3] in labels):
-            lab =(count - labels[i_list[3]])*4
-        else:
-            print(f"ERROR on line {count+1}: No such Label Found {i_list[3]}")
-            break
+        try:
+            i_list[3] = int(i_list[3])
 
+        except ValueError:
+            i_list[3] = i_list[3]
+
+
+        if(type(i_list[3])==str):
+            if(i_list[3] in labels):
+                lab =(labels[i_list[3]]-count)*4
+            else:
+                print(f"ERROR on line {count+1}: No such Label Found {i_list[3]}")
+                break
+
+
+        elif type(i_list[3]==int):
+            lab = i_list[3]
+        
         if(lab<-2**12 or lab> 2**12-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
         
         binary=imm_to_bin(lab,13)
-        s=binary[12]+binary[5:11]+register_dict[i_list[1]]+register_dict[i_list[2]]+binary[1:5]+binary[11]+b_type[i_list[0]]
-        
+        s=binary=binary[0]+binary[2:8]+register_dict[i_list[2]]+register_dict[i_list[1]]+b_type[i_list[0]]+binary[8:12]+binary[1]+"1100011"        
     
+        output.append(s)    
+
     #U TYPE
     elif i_list[0] in u_type:
         given_value=int(i_list[2])
@@ -178,7 +205,8 @@ for i in read:
             break
         
         imm=imm_to_bin(int(i_list[2]),32)
-        s=imm[1:21]+register_dict[i_list[1]]+u_type[i_list[0]]
+        s=imm[0:20]+register_dict[i_list[1]]+u_type[i_list[0]]
+        output.append(s)
         
     # J TYPE
     elif i_list[0] in j_type:
@@ -190,12 +218,12 @@ for i in read:
 
         imm=imm_to_bin(int(i_list[2]),21)
         s=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
+        output.append(s)
     
     count += 1
 
 
-    if (i_list == []):
-        continue
+   
     
    
     
