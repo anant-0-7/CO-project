@@ -223,7 +223,7 @@ for i in read:
             if(i_list[2] in labels):
                 lab =(labels[i_list[2]]-count)*4
             else:
-                print(f"ERROR on line {count+1}: No such Label Found {i_list[3]}")
+                print(f"ERROR on line {count+1}: No such Label Found {i_list[2]}")
                 break
 
 
