@@ -121,7 +121,7 @@ for i in read:
     
     #R Type instructions
     if i_list[0] in r_type:
-        if i_list == "sub":
+        if i_list[0] == "sub":
             binary = ""
             binary += "0100000" + register_dict[i_list[3]]+ register_dict[i_list[2]]+ r_type[i_list[0]] + register_dict[i_list[1]]+"0110011"
 
@@ -156,12 +156,17 @@ for i in read:
     elif i_list[0] in b_type:
 
         lab = -1
-        if(i_list[3] in labels):
-            lab =(labels[i_list[3]]-count)*4
-        else:
-            print(f"ERROR on line {count+1}: No such Label Found {i_list[3]}")
-            break
+        if(type(i_list[3])==str):
+            if(i_list[3] in labels):
+                lab =(labels[i_list[3]]-count)*4
+            else:
+                print(f"ERROR on line {count+1}: No such Label Found {i_list[3]}")
+                break
 
+
+        elif type(i_list[3]==int):
+            lab = i_list[3]
+        
         if(lab<-2**12 or lab> 2**12-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
