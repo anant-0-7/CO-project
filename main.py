@@ -231,7 +231,7 @@ for i in read:
         
     # J TYPE
     elif i_list[0] in j_type:
-        igiven_value=int(i_list[2])
+        given_value=int(i_list[2])
         if(given_value<-2**20 or given_value> 2**20-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
