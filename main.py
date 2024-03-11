@@ -276,7 +276,11 @@ for i in read:
         imm=imm_to_bin(int(i_list[2]),21)
         s=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
         output.append(s)
-    
+
+    else:
+        print("ERROR: Invalid Instruction")
+        break        
+
     count += 1
 
 
