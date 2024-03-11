@@ -239,7 +239,30 @@ for i in read:
         
     # J TYPE
     elif i_list[0] in j_type:
-        given_value=int(i_list[2])
+        lab = -1
+        try:
+            i_list[2] = int(i_list[2])
+
+        except ValueError:
+            i_list[2] = i_list[2]
+
+
+        if(type(i_list[2])==str):
+            if(i_list[2] in labels):
+                lab =(labels[i_list[2]]-count)*4
+            else:
+                print(f"ERROR on line {count+1}: No such Label Found {i_list[2]}")
+                break
+
+
+        elif type(i_list[2]==int):
+            lab = i_list[2]
+        
+        if(lab<-2**20 or lab> 2**20-1):
+            print(f"ERROR on line {count+1}:the immediate value is out of bounds")
+            break
+
+        
         if(given_value<-2**20 or given_value> 2**20-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
