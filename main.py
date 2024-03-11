@@ -97,16 +97,22 @@ f = open("text.txt","r")
 read = f.readlines()
 labels = {}
 lines = 0
+is_hault = False
 for j in read:
     if ":" in j:
         index = j.index(":")
         labels[j[:index]]= lines
         read[lines] = j[index+1:]
     lines += 1
+    if "beq zero,zero,0x00000000" ==read[lines]:
+        is_hault = True
 
 
 count = 0
 for i in read:
+    if(not is_hault):
+        print("ERROR: No Hault Present")
+        break
 
     words = i.split()
     i_list = []
