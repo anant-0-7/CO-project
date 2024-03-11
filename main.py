@@ -130,6 +130,7 @@ for i in read:
         i_list.extend(word.split(","))
 
     if (i_list == []):
+        count += 1
         continue
 
     if '(' in i_list[-1]:
@@ -262,7 +263,7 @@ for i in read:
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
 
-        
+
         if(given_value<-2**20 or given_value> 2**20-1):
             print(f"ERROR on line {count+1}:the immediate value is out of bounds")
             break
