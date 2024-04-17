@@ -63,6 +63,9 @@ u_type = {"lui":"0110111", "auipc":"0010111"}
 j_type = {"jal": "1101111"}
 #no funct3
 
+bonus = {"mul": "000", "rst": "001", "halt": "010", "rvrs": "011"}
+#opcode: 1111111
+
 def tows_complement(binary):
     ones_complement = ''
     for i in binary:
@@ -316,6 +319,17 @@ for i in read:
         s=imm[1]+imm[10:20]+imm[10]+imm[2:10]+register_dict[i_list[1]]+"1101111"
         output.append(s)
 
+    elif i_list[0] in bonus:
+        s = ""
+        if i_list[0] == 'mul':
+            s = "0000000" + register_dict[i_list[3]] + register_dict[i_list[2]] + bonus[i_list[0]] +  register_dict[i_list[1]] + "1111111"
+
+        elif i_list[0] == 'rst' or i_list[0] == 'halt':
+            funct3 = bonus[i_list[0]]
+            s = "0000000" + "00000" + "00000" + funct3 + "00000" + "1111111"
+
+        elif i_list[0] == "rvrs":
+            s = "0000000" + "00000" + register_dict[i_list[2]] +  bonus[i_list[0]] + register_dict[i_list[1]] + "1111111"
     else:
         print("ERROR: Invalid Instruction")
         break        
