@@ -114,8 +114,10 @@ def i_type(opcode, rd, funct3, rs1, imm, pc):
     elif opcode == "1100111" and funct3=="000":  # jalr   #NOT CLEAR
         
         registers[rd] = pc + 4
-        pc = registers[rs1] + imm
-        
+        pc_str = dec_to_bin(pc, 32)
+        pc_str = pc_str[:-1] + "0"
+        pc = twos_complement_to_decimal(pc_str)
+        pc = pc + imm   
         
         
     elif opcode == "0010011" and funct3=="011" :  # sltiu
@@ -127,7 +129,10 @@ def i_type(opcode, rd, funct3, rs1, imm, pc):
             registers[rd] = 1
 
 
-    return pc        
+    if(pc != "1100111"):
+        pc = pc +4
+
+    return pc      
         
 
 
@@ -234,6 +239,10 @@ def b_type (imm, funct3, pc, rs1, rs2):
     if branch_condition:
         pc += imm
     
+    else:
+        pc = pc+4
+        
+    
     return pc 
 
 
@@ -292,7 +301,6 @@ def simulate_instructions(instructions):
             imm = inst[0:12]
             imm = twos_complement_to_decimal(imm)
             pc = i_type(opcode, rd, funct3, rs1, imm,pc)
-            pc += 4
             
             print_registers(pc)
 
@@ -326,8 +334,8 @@ def simulate_instructions(instructions):
             imm = imm12 + imm11 + imm10_5 + imm4_1 + imm0
             imm = twos_complement_to_decimal(imm)
             pc = b_type(imm, funct3,pc,rs1,rs2)
-            pc += 4
             print_registers(pc)  
+
 
          # Jtype   
         elif opcode == "1101111":
@@ -340,15 +348,10 @@ def simulate_instructions(instructions):
             rd = register_mapping[unsigned_b2d(inst[20:25])]
 
             pc = j_type(pc, imm, rd)
-            pc += 4
             print_registers(pc)
-        
 
     print_registers(pc)
-            
-
-            
-                              
+                                             
 
     return registers
 
@@ -359,7 +362,6 @@ with open(input_file, 'r') as file:
 
 instructions = [s.rstrip('\n') for s in instructions]
 
-print(instructions)
 
 file = open(output_file, 'w')
 
