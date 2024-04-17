@@ -22,6 +22,9 @@ for i in range(0x00010000, 0x0001007d, 4):
     # Initialize each key with a value of zero
     memory[hex_key] = 0
 
+def registers_reset():
+    registers = {f'x{i}': 0 for i in range(32)}
+
 
 def unsigned_b2d(binary_str):
     return int(binary_str, 2)
@@ -349,6 +352,32 @@ def simulate_instructions(instructions):
 
             pc = j_type(pc, imm, rd)
             print_registers(pc)
+
+        elif opcode == "1111111":
+            funct3 = inst[17:20]
+            rd = register_mapping[unsigned_b2d(inst[20:25])]
+            funct3 = inst[17:20]
+            rs2 = register_mapping[unsigned_b2d(inst[7:12])]
+            rs1 = register_mapping[unsigned_b2d(inst[12:17])]
+
+            if funct3 == "000":
+                
+                registers[rd] = (registers[rs1])*(registers[rs2])
+                pc += 4
+
+                print_registers(pc)
+
+            elif funct3 == "001":
+                registers_reset()
+            
+            elif funct3 == "010":
+                break
+
+            elif funct3 == "011":
+                temp = dec_to_bin(registers[rs1], 32)[::-1]
+                registers[rd] = twos_complement_to_decimal(temp)
+                
+                
 
     print_registers(pc)
                                              
